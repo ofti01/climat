@@ -4,10 +4,17 @@ import {OPEN_WEATHER_API_KEY} from "@env"
 import axios from "axios";
 
 const apiKey = OPEN_WEATHER_API_KEY;
-
+const brgs = [{
+    id:"01d",
+    first:"#DAE9F6",
+    second:"#FFF"
+},{
+    id:"03d",
+    first:"#679ED9",
+    second:"#02072E"
+}]
 export class Utils {
     
-
     static getCoords = async () => {
         try {
             const {status} = Location.requestForegroundPermissionsAsync()
@@ -35,6 +42,27 @@ export class Utils {
           .catch((error) => {
             Alert.alert(error.message);
         });
+
+    }
+
+    static getJours() {
+        let jours = []
+        for (let i = 0; i < 5; i++) {
+            let date = new Date();
+            date.setDate(date.getDate()+i)
+            let kk = {}
+            if ( i==0 ) kk ={
+                nomjour: 'Aujoud\'hui',
+                jour: date.getDate()
+            }
+            else kk ={
+                nomjour: ''+date.toLocaleString('fr-FR', {  weekday: 'long' }),
+                jour: date.getDate()
+            }
+            jours.push(kk)
+
+        }
+        return jours;
 
     }
 }
