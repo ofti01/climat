@@ -19,8 +19,8 @@ const ListJours = ({setSelected}) => {
              {jours.map((jour, index)=> {
                 return(
                 <Pressable key={index} style={tailwind("flex flex-row  p-3 mr-5")} onPress={()=>setSelectedItem(index)}>
-                    <Text style={[{fontSize:14,fontFamily:"dmsRegular",color:'#636e72'},index == selected && {fontWeight:'bold',color:'#000'}]}>{jour.nomjour[0].toUpperCase() + jour.nomjour.slice(1).toLowerCase()+', '}</Text>
-                    <Text style={[{fontSize:14,fontFamily:"dmsRegular",color:'#636e72'},index == selected && {fontWeight:'bold',color:'#000'}]}>{jour.jour}</Text>
+                    <Text style={[tailwind("text-gray-500"),{fontSize:14,fontFamily:"dmsRegular"},index == selected && {fontWeight:'bold',color:'#000'}]}>{jour.nomjour[0].toUpperCase() + jour.nomjour.slice(1).toLowerCase()+', '}</Text>
+                    <Text style={[tailwind("text-gray-500"),{fontSize:15,fontFamily:"dmsRegular",},index == selected && {fontWeight:'bold',color:'#000'}]}>{jour.jour}</Text>
                 </Pressable>
                 )
             })}

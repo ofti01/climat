@@ -6,9 +6,11 @@ import tailwind from 'tailwind-rn'
 import ListJours from '../components/ListJours'
 import Weather from '../components/Weather'
 import { BgContext } from '../utils/BgContext'
-
+import { Ionicons } from '@expo/vector-icons'
 import { Utils } from '../utils/Utils'
 import {OPEN_WEATHER_API_KEY} from "@env"
+import HeadCountry from '../components/HeadCountry'
+import WeatherDetail from '../components/WeatherDetail'
 
 const apiKey = OPEN_WEATHER_API_KEY
 const Home = () => {
@@ -19,28 +21,29 @@ const Home = () => {
     const [country, setCountry] = useState(null)
     
     useEffect( async()=> {
+        console.log(selected)
         getBackgroundColor()
-        getForecast(location)
-        getCountry(location)
-    },[])
+        getForecast()
+        getCountry()
+    },[selected])
 
-    getCountry = (location) => {
+    getCountry = async () => {
         const url = `https://api.openweathermap.org/data/2.5/weather?lat=${location.coords.latitude}&lon=${location.coords.longitude}&lang=fr&appid=${apiKey}&units=metric`
         axios.get(url)
         .then(({data}) => {
-            setCountry(data.name)
+            setCountry(data)
         })
         .catch((error) => {
             console.log(error.message)
         })
     }
 
-    getForecast = (location) =>{
+    getForecast = async () =>{
         
         let url = `https://api.openweathermap.org/data/2.5/onecall?lat=${location.coords.latitude}&lon=${location.coords.longitude}&lang=fr&appid=${apiKey}&units=metric&exclude=minutely`
         axios.get(url)
         .then(({data}) => {
-            setForecast(data)
+            setForecast(data.daily.slice(0,1))
         })
         .catch((error) => {
             console.log(error.message)
@@ -66,24 +69,29 @@ const Home = () => {
     
 
     return (
-        <SafeAreaView style={[tailwind("flex-1 py-4 px-2"),{backgroundColor:'#78E0D8'}]}>
+        <SafeAreaView style={[tailwind("flex-1 py-4 px-2"),{backgroundColor:'#2e86de'}]}>
+            {forecast && country ? 
             <LinearGradient
             colors={['transparent','rgba(39, 33, 36,0.4)']}
             style={tailwind("absolute top-0 bottom-0 right-0 left-0")}>
                 <ScrollView contentContainerStyle={tailwind("py-4 flex-1  items-center")}
                 showsVerticalScrollIndicator={false}>
-                    <Text>{country}</Text>
+                    {country && <HeadCountry  {...country}></HeadCountry>}
                     {forecast && <Weather {...forecast}/>}
-                    <Text style={{fontFamily:"dmsBold"}}>San Francisco</Text>
                     <View style={tailwind("flex h-16 py-2")}>
+                        <ScrollView horizontal contentContainerStyle={tailwind("flex")}
+                        showsHorizontalScrollIndicator={false}>
+                            <ListJours setSelected={setSelected}/>
+                        </ScrollView>
+                    </View>
+                    <View style={tailwind("flex")}>
                     <ScrollView horizontal contentContainerStyle={tailwind("flex")}
                     showsHorizontalScrollIndicator={false}>
-                        <ListJours setSelected={setSelected}/>
+                        <WeatherDetail/>
                     </ScrollView>
                     </View>
-                    <Text>{selected} léléél</Text>
                 </ScrollView>
-            </LinearGradient>
+            </LinearGradient>:<></>}
         </SafeAreaView>
     )
 }
