@@ -5,10 +5,10 @@ import { Utils } from '../utils/Utils'
 
 const ListJours = ({setSelected}) => {
     
-    const [jours, setJours] = useState([])
+    
     const[selected, setItem] = useState(0)
     useEffect(()=>{
-        setJours(Utils.getJours())
+        
     },[])
     const setSelectedItem = (index) => {
         setSelected(index)
